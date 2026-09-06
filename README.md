@@ -28,6 +28,10 @@ No build step or package installation is required.
 - “Surprise me” random destination picker.
 - Mood collection shortcuts that map directly to destination filters.
 - Trip-builder modal that sends a selected preference to the discovery grid.
+- Sort destinations by featured order, budget, trip length, or name.
+- Open a mini destination guide with travel length, spend level, best season, and highlights.
+- Dedicated saved-trip shortlist with remove controls and clipboard copy.
+- Saved-only discovery mode from the header Saved control.
 - Responsive layouts for desktop, tablet, and mobile widths.
 
 ## Technical notes
