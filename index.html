@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Weekend Wander helps you find a beautiful escape for your next free weekend." />
+  <title>Weekend Wander | Find your next escape</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { display: ['Fraunces', 'Georgia', 'serif'], sans: ['DM Sans', 'Arial', 'sans-serif'] },
+          colors: { ink: '#17211f', fern: '#365d4c', moss: '#dfe9df', peach: '#f4b28c', cream: '#f8f5ef' }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="bg-cream text-ink antialiased">
+  <header class="site-header">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8" aria-label="Main navigation">
+      <a class="brand-mark" href="#top" aria-label="Weekend Wander home"><span class="brand-dot"></span>weekend<span>wander</span></a>
+      <div class="hidden items-center gap-8 text-sm font-semibold text-ink/65 md:flex">
+        <a class="nav-link active" href="#discover">Discover</a>
+        <a class="nav-link" href="#collections">Collections</a>
+        <a class="nav-link" href="#how-it-works">How it works</a>
+      </div>
+      <button id="savedNav" class="saved-button" type="button"><span aria-hidden="true">♡</span> Saved <b id="savedCount">0</b></button>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero mx-auto max-w-7xl px-5 pb-16 pt-10 lg:px-8 lg:pb-24 lg:pt-16">
+      <div class="hero-copy">
+        <p class="eyebrow fade-up">A little time. A lot of somewhere.</p>
+        <h1 class="hero-title fade-up delay-1">Your next <em>good idea</em><br />is closer than you think.</h1>
+        <p class="hero-subtitle fade-up delay-2">Handpicked escapes for the days you want to get away, without going too far.</p>
+        <div class="hero-actions fade-up delay-3">
+          <a href="#discover" class="primary-button">Find my weekend <span aria-hidden="true">↗</span></a>
+          <button id="openModal" class="secondary-button border-0 bg-transparent p-0 font-semibold text-fern transition hover:-translate-y-0.5 hover:text-ink" type="button">Build my weekend <span aria-hidden="true">＋</span></button>
+          <span class="hero-note"><span class="avatar-stack"><i></i><i></i><i></i></span> Loved by 12,000+ weekenders</span>
+        </div>
+      </div>
+      <div class="hero-art fade-up delay-2" aria-label="A sunny view of the Italian coast">
+        <img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=1200&q=85" alt="White buildings on the Amalfi coast" />
+        <div class="art-label"><span>01</span><strong>Slow mornings<br />in Positano</strong><small>Amalfi Coast, Italy</small></div>
+        <div class="sun-stamp">take<br />the<br /><strong>scenic</strong><br />route</div>
+      </div>
+    </section>
+
+    <section id="discover" class="discover-section mx-auto max-w-7xl px-5 py-16 lg:px-8">
+      <div class="section-heading">
+        <div><p class="eyebrow">Curated for your kind of weekend</p><h2>Where will you wander?</h2></div>
+        <button id="surpriseButton" class="text-button" type="button">Surprise me <span>✦</span></button>
+      </div>
+      <div class="filter-bar" role="search">
+        <label class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search a place or a feeling..." /></label>
+        <div class="filter-pills" aria-label="Filter destinations">
+          <button class="filter-pill active" data-filter="all" type="button">All escapes</button>
+          <button class="filter-pill" data-filter="coast" type="button">Coastal</button>
+          <button class="filter-pill" data-filter="city" type="button">City breaks</button>
+          <button class="filter-pill" data-filter="nature" type="button">Nature</button>
+        </div>
+      </div>
+      <div id="destinationGrid" class="destination-grid" aria-live="polite"></div>
+      <p id="emptyState" class="empty-state hidden">No escapes found. Try a different mood or place.</p>
+    </section>
+
+    <section id="collections" class="collection-band">
+      <div class="mx-auto max-w-7xl px-5 py-16 lg:px-8">
+        <div class="section-heading light"><div><p class="eyebrow">The weekend edit</p><h2>Pick a mood.<br /><em>Pack accordingly.</em></h2></div><p class="collection-copy">Some weekends call for a packed itinerary. Others call for a book, a train ticket, and no plans at all.</p></div>
+        <div class="mood-grid">
+          <button class="mood-card mood-slow" data-mood="slow" type="button"><span>For doing less</span><strong>Slow &amp; sunny</strong><i>→</i></button>
+          <button class="mood-card mood-curious" data-mood="curious" type="button"><span>For the curious</span><strong>Culture crawl</strong><i>→</i></button>
+          <button class="mood-card mood-wild" data-mood="wild" type="button"><span>For going outside</span><strong>Into the wild</strong><i>→</i></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="how-section mx-auto max-w-7xl px-5 py-20 lg:px-8">
+      <p class="eyebrow">The easy part</p><h2>Make space for a story.</h2>
+      <div class="steps"><div><b>01</b><h3>Choose your mood</h3><p>Start with how you want to feel, not just where you want to go.</p></div><div><b>02</b><h3>Find your place</h3><p>Browse small, beautiful ideas curated for a two or three-day escape.</p></div><div><b>03</b><h3>Make it yours</h3><p>Save the ones that spark something and build your perfect weekend.</p></div></div>
+    </section>
+  </main>
+
+  <footer class="mx-auto flex max-w-7xl flex-col gap-4 border-t border-ink/10 px-5 py-8 text-sm text-ink/55 md:flex-row md:items-center md:justify-between lg:px-8"><span class="brand-mark small"><span class="brand-dot"></span>weekend<span>wander</span></span><span>Made for the days between.</span><span>© 2026 Weekend Wander</span></footer>
+
+  <div id="tripModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card"><button id="closeModal" class="modal-close" type="button" aria-label="Close">×</button><p class="eyebrow">Your weekend, your way</p><h2 id="modalTitle">Build a little escape.</h2><p>Tell us what sounds good and we’ll make a shortlist of places worth leaving home for.</p><label>What are you craving?<select id="modalMood"><option value="all">A little bit of everything</option><option value="coast">Sea air &amp; long lunches</option><option value="city">Art, food &amp; wandering</option><option value="nature">Fresh air &amp; quiet</option></select></label><button id="modalSubmit" class="primary-button full" type="button">Show me the good stuff <span>↗</span></button></div></div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
