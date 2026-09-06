@@ -9,6 +9,7 @@ weekend-wander/
 ├── index.html   # Semantic page structure, content, and Tailwind CDN setup
 ├── styles.css   # Custom visual system, responsive layout, animations, and modal styling
 ├── script.js    # Destination data and all client-side interactions
+├── logo.svg     # Local Weekend Wander brand mark and favicon
 └── README.md    # Project overview and usage notes
 ```
 
@@ -32,6 +33,7 @@ No build step or package installation is required.
 - Open a mini destination guide with travel length, spend level, best season, and highlights.
 - Dedicated saved-trip shortlist with remove controls and clipboard copy.
 - Saved-only discovery mode from the header Saved control.
+- Realistic estimated prices per person for each destination, shown in cards, guides, and saved plans.
 - Responsive layouts for desktop, tablet, and mobile widths.
 
 ## Technical notes
@@ -39,4 +41,5 @@ No build step or package installation is required.
 - The project intentionally uses plain HTML, Tailwind CSS via CDN, custom CSS, and vanilla JavaScript.
 - Destination data lives in the `destinations` array in `script.js`, making it easy to replace the mock content with an API later.
 - Images are remote Unsplash URLs and are used as static presentation assets.
+- The local `logo.svg` is used for the favicon, header, and footer brand identity.
 - Saved destination IDs are stored under `weekend-wander-saved` in `localStorage`.

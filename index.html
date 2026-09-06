@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Weekend Wander helps you find a beautiful escape for your next free weekend." />
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
   <title>Weekend Wander | Find your next escape</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -24,7 +25,7 @@
 <body class="bg-cream text-ink antialiased">
   <header class="site-header">
     <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8" aria-label="Main navigation">
-      <a class="brand-mark" href="#top" aria-label="Weekend Wander home"><span class="brand-dot"></span>weekend<span>wander</span></a>
+      <a class="brand-mark" href="#top" aria-label="Weekend Wander home"><img src="logo.svg" alt="" />weekend<span>wander</span></a>
       <div class="hidden items-center gap-8 text-sm font-semibold text-ink/65 md:flex">
         <a class="nav-link active" href="#discover">Discover</a>
         <a class="nav-link" href="#collections">Collections</a>
@@ -90,7 +91,7 @@
     </section>
   </main>
 
-  <footer class="mx-auto flex max-w-7xl flex-col gap-4 border-t border-ink/10 px-5 py-8 text-sm text-ink/55 md:flex-row md:items-center md:justify-between lg:px-8"><span class="brand-mark small"><span class="brand-dot"></span>weekend<span>wander</span></span><span>Made for the days between.</span><span>© 2026 Weekend Wander</span></footer>
+  <footer class="mx-auto flex max-w-7xl flex-col gap-4 border-t border-ink/10 px-5 py-8 text-sm text-ink/55 md:flex-row md:items-center md:justify-between lg:px-8"><span class="brand-mark small"><img src="logo.svg" alt="" />weekend<span>wander</span></span><span>Made for the days between.</span><span>© 2026 Weekend Wander</span></footer>
 
   <div id="tripModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card"><button id="closeModal" class="modal-close" type="button" aria-label="Close">×</button><p class="eyebrow">Your weekend, your way</p><h2 id="modalTitle">Build a little escape.</h2><p>Tell us what sounds good and we’ll make a shortlist of places worth leaving home for.</p><label>What are you craving?<select id="modalMood"><option value="all">A little bit of everything</option><option value="coast">Sea air &amp; long lunches</option><option value="city">Art, food &amp; wandering</option><option value="nature">Fresh air &amp; quiet</option></select></label><button id="modalSubmit" class="primary-button full" type="button">Show me the good stuff <span>↗</span></button></div></div>
   <div id="detailModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-card"><button id="closeDetail" class="modal-close" type="button" aria-label="Close">×</button><div id="detailImage" class="detail-image"></div><div class="detail-content"><p id="detailLabel" class="eyebrow"></p><h2 id="detailTitle"></h2><p id="detailDescription"></p><div id="detailFacts" class="detail-facts"></div><div id="detailHighlights" class="highlight-list"></div><button id="detailSave" class="primary-button full" type="button"></button></div></div></div>
