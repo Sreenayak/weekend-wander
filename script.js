@@ -15,6 +15,13 @@ const emptyState = document.querySelector('#emptyState');
 const savedCount = document.querySelector('#savedCount');
 const planSummary = document.querySelector('#planSummary');
 const sortSelect = document.querySelector('#sortSelect');
+const authScreen = document.querySelector('#authScreen');
+const appShell = document.querySelector('#appShell');
+const authForm = document.querySelector('#authForm');
+const authError = document.querySelector('#authError');
+const nameField = document.querySelector('#nameField');
+const authName = document.querySelector('#authName');
+let authMode = 'signin';
 let activeFilter = 'all';
 let showSavedOnly = false;
 let saved = JSON.parse(localStorage.getItem('weekend-wander-saved') || '[]');
@@ -117,4 +124,57 @@ document.querySelector('#openModal').addEventListener('click', () => modal.class
 document.querySelector('#modalSubmit').addEventListener('click', () => { activeFilter = document.querySelector('#modalMood').value; showSavedOnly = false; document.querySelectorAll('.filter-pill').forEach((pill) => pill.classList.toggle('active', pill.dataset.filter === activeFilter)); searchInput.value = ''; modal.classList.add('hidden'); renderDestinations(); document.querySelector('#discover').scrollIntoView({ behavior: 'smooth' }); });
 document.querySelector('#closeModal').addEventListener('click', () => modal.classList.add('hidden'));
 modal.addEventListener('click', (event) => { if (event.target === modal) modal.classList.add('hidden'); });
+
+function showApp() {
+  authScreen.classList.add('auth-hidden');
+  appShell.classList.add('is-visible');
+  window.setTimeout(() => { authScreen.hidden = true; initScrollReveals(); }, 450);
+}
+
+function showAuth() {
+  authScreen.hidden = false;
+  authScreen.classList.remove('auth-hidden');
+  appShell.classList.remove('is-visible');
+}
+
+function initScrollReveals() {
+  const revealItems = document.querySelectorAll('.discover-section .section-heading, .filter-bar, .plan-strip, .destination-card, .collection-band .section-heading, .mood-card, .how-section > h2, .steps > div');
+  revealItems.forEach((item) => item.classList.add('reveal-on-scroll'));
+  if (!('IntersectionObserver' in window)) return revealItems.forEach((item) => item.classList.add('is-revealed'));
+  const observer = new IntersectionObserver((entries, currentObserver) => {
+    entries.forEach((entry) => { if (!entry.isIntersecting) return; entry.target.classList.add('is-revealed'); currentObserver.unobserve(entry.target); });
+  }, { threshold: .12 });
+  revealItems.forEach((item) => observer.observe(item));
+}
+
+document.querySelectorAll('[data-auth-mode]').forEach((tab) => tab.addEventListener('click', () => {
+  authMode = tab.dataset.authMode;
+  document.querySelectorAll('[data-auth-mode]').forEach((authTab) => authTab.classList.toggle('active', authTab === tab));
+  nameField.classList.toggle('hidden', authMode !== 'signup');
+  authName.required = authMode === 'signup';
+  document.querySelector('#authSubmit').innerHTML = authMode === 'signup' ? 'Create my account <span>↗</span>' : 'Continue to Weekend Wander <span>↗</span>';
+  authError.textContent = '';
+}));
+
+authForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const email = document.querySelector('#authEmail').value.trim();
+  const password = document.querySelector('#authPassword').value;
+  const name = authName.value.trim() || email.split('@')[0];
+  if (!email || !email.includes('@')) return void (authError.textContent = 'Please enter a valid email address.');
+  if (password.length < 6) return void (authError.textContent = 'Your password needs at least 6 characters.');
+  if (authMode === 'signup' && name.length < 2) return void (authError.textContent = 'Tell us your name so we know what to call you.');
+  localStorage.setItem('weekend-wander-session', JSON.stringify({ email, name, mode: authMode }));
+  showToast(`Welcome${name ? `, ${name}` : ''}. Your next escape is ready.`);
+  showApp();
+});
+
+document.querySelector('#signOut').addEventListener('click', () => {
+  localStorage.removeItem('weekend-wander-session');
+  showAuth();
+  authForm.reset();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+if (localStorage.getItem('weekend-wander-session')) showApp();
 renderDestinations();

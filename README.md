@@ -34,6 +34,10 @@ No build step or package installation is required.
 - Dedicated saved-trip shortlist with remove controls and clipboard copy.
 - Saved-only discovery mode from the header Saved control.
 - Realistic estimated prices per person for each destination, shown in cards, guides, and saved plans.
+- Animated sign-in and account creation gate before the travel experience.
+- Frontend-only session persistence with sign-out using browser `localStorage`.
+- Slide-up app entrance and staggered scroll-reveal animations for discovery content.
+- Reduced-motion support through `prefers-reduced-motion`.
 - Responsive layouts for desktop, tablet, and mobile widths.
 
 ## Technical notes
@@ -43,3 +47,4 @@ No build step or package installation is required.
 - Images are remote Unsplash URLs and are used as static presentation assets.
 - The local `logo.svg` is used for the favicon, header, and footer brand identity.
 - Saved destination IDs are stored under `weekend-wander-saved` in `localStorage`.
+- Auth sessions are stored under `weekend-wander-session` in `localStorage`; this is a mock frontend flow and does not provide production security or a backend account system.

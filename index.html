@@ -23,6 +23,30 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="bg-cream text-ink antialiased">
+  <section id="authScreen" class="auth-screen" aria-labelledby="authTitle">
+    <div class="auth-visual">
+      <div class="auth-orbit orbit-one"></div><div class="auth-orbit orbit-two"></div>
+      <img class="auth-logo" src="logo.svg" alt="Weekend Wander" />
+      <p class="auth-overline">The good days are out there.</p>
+      <h1>Make a little room<br /><em>for somewhere.</em></h1>
+      <p class="auth-visual-copy">A quieter way to discover weekend escapes worth remembering.</p>
+      <div class="auth-postcard"><span>WEEKEND WANDER / 001</span><strong>Go where<br />the light is.</strong><small>Curated escapes for curious people.</small></div>
+    </div>
+    <div class="auth-panel">
+      <div class="auth-panel-top"><span class="brand-mark auth-brand"><img src="logo.svg" alt="" />weekend<span>wander</span></span><span class="auth-caption">Your next chapter starts here</span></div>
+      <div class="auth-copy"><p class="eyebrow">Welcome in</p><h2 id="authTitle">Find your next<br /><em>good idea.</em></h2><p>Sign in to save escapes, build a shortlist, and keep your weekend plans in one place.</p></div>
+      <div class="auth-tabs" role="tablist"><button class="auth-tab active" data-auth-mode="signin" type="button" role="tab">Sign in</button><button class="auth-tab" data-auth-mode="signup" type="button" role="tab">Create account</button></div>
+      <form id="authForm" class="auth-form">
+        <label class="auth-field"><span>Email address</span><input id="authEmail" type="email" placeholder="you@example.com" autocomplete="email" required /></label>
+        <label class="auth-field"><span>Password</span><input id="authPassword" type="password" placeholder="At least 6 characters" minlength="6" autocomplete="current-password" required /></label>
+        <label id="nameField" class="auth-field hidden"><span>Your name</span><input id="authName" type="text" placeholder="What should we call you?" autocomplete="name" /></label>
+        <p id="authError" class="auth-error" role="alert"></p>
+        <button id="authSubmit" class="primary-button auth-submit" type="submit">Continue to Weekend Wander <span>↗</span></button>
+      </form>
+      <p class="auth-footnote">No credit card. No noise. Just better weekends.</p>
+    </div>
+  </section>
+  <div id="appShell" class="app-shell">
   <header class="site-header">
     <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 lg:px-8" aria-label="Main navigation">
       <a class="brand-mark" href="#top" aria-label="Weekend Wander home"><img src="logo.svg" alt="" />weekend<span>wander</span></a>
@@ -31,7 +55,7 @@
         <a class="nav-link" href="#collections">Collections</a>
         <a class="nav-link" href="#how-it-works">How it works</a>
       </div>
-      <button id="savedNav" class="saved-button" type="button"><span aria-hidden="true">♡</span> Saved <b id="savedCount">0</b></button>
+      <div class="account-actions"><button id="savedNav" class="saved-button" type="button"><span aria-hidden="true">♡</span> Saved <b id="savedCount">0</b></button><button id="signOut" class="sign-out" type="button">Sign out</button></div>
     </nav>
   </header>
 
@@ -97,6 +121,7 @@
   <div id="detailModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-card"><button id="closeDetail" class="modal-close" type="button" aria-label="Close">×</button><div id="detailImage" class="detail-image"></div><div class="detail-content"><p id="detailLabel" class="eyebrow"></p><h2 id="detailTitle"></h2><p id="detailDescription"></p><div id="detailFacts" class="detail-facts"></div><div id="detailHighlights" class="highlight-list"></div><button id="detailSave" class="primary-button full" type="button"></button></div></div></div>
   <div id="planModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="planTitle"><div class="modal-card plan-modal"><button id="closePlan" class="modal-close" type="button" aria-label="Close">×</button><p class="eyebrow">Your saved escapes</p><h2 id="planTitle">Build your little plan.</h2><p id="planDescription"></p><div id="planList" class="plan-list"></div><button id="copyPlan" class="primary-button full" type="button">Copy my shortlist <span>↗</span></button></div></div>
   <div id="toast" class="toast" role="status"></div>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
