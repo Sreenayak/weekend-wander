@@ -29,6 +29,8 @@ const profileEmail = document.querySelector('#profileEmail');
 let authMode = 'signin';
 let activeFilter = 'all';
 let showSavedOnly = false;
+let matchDuration = 'all';
+let matchBudget = 'all';
 let saved = JSON.parse(localStorage.getItem('weekend-wander-saved') || '[]');
 
 function renderDestinations() {
@@ -36,7 +38,9 @@ function renderDestinations() {
   const filtered = destinations.filter((destination) => {
     const matchesFilter = activeFilter === 'all' || destination.type === activeFilter;
     const matchesQuery = !query || `${destination.name} ${destination.location} ${destination.label} ${destination.description}`.toLowerCase().includes(query);
-    return matchesFilter && matchesQuery && (!showSavedOnly || saved.includes(destination.id));
+    const matchesDuration = matchDuration === 'all' || destination.duration.startsWith(matchDuration);
+    const matchesBudget = matchBudget === 'all' || (matchBudget === 'low' && destination.price < 400) || (matchBudget === 'mid' && destination.price >= 400 && destination.price <= 600) || (matchBudget === 'high' && destination.price > 600);
+    return matchesFilter && matchesQuery && matchesDuration && matchesBudget && (!showSavedOnly || saved.includes(destination.id));
   }).sort((first, second) => {
     if (sortSelect.value === 'name') return first.name.localeCompare(second.name);
     if (sortSelect.value === 'shortest') return Number(first.duration[0]) - Number(second.duration[0]);
@@ -55,6 +59,7 @@ function renderDestinations() {
   emptyState.classList.toggle('hidden', filtered.length > 0);
   savedCount.textContent = saved.length;
   planSummary.textContent = saved.length ? `${saved.length} place${saved.length === 1 ? '' : 's'} saved for later` : 'Nothing saved yet';
+  document.querySelector('#matchResult').textContent = `${filtered.length} escape${filtered.length === 1 ? '' : 's'} to explore`;
 }
 
 function showToast(message) {
@@ -70,6 +75,21 @@ document.querySelectorAll('.filter-pill').forEach((button) => button.addEventLis
 }));
 searchInput.addEventListener('input', renderDestinations);
 sortSelect.addEventListener('change', renderDestinations);
+document.querySelectorAll('[data-duration]').forEach((button) => button.addEventListener('click', () => {
+  matchDuration = button.dataset.duration;
+  document.querySelectorAll('[data-duration]').forEach((option) => option.classList.toggle('active', option === button));
+  renderDestinations();
+}));
+document.querySelectorAll('[data-budget]').forEach((button) => button.addEventListener('click', () => {
+  matchBudget = button.dataset.budget;
+  document.querySelectorAll('[data-budget]').forEach((option) => option.classList.toggle('active', option === button));
+  renderDestinations();
+}));
+document.querySelector('#resetMatch').addEventListener('click', () => {
+  matchDuration = 'all'; matchBudget = 'all';
+  document.querySelectorAll('.match-option').forEach((option) => option.classList.toggle('active', option.dataset.duration === 'all' || option.dataset.budget === 'all'));
+  renderDestinations(); showToast('Match filters reset.');
+});
 grid.addEventListener('click', (event) => {
   const guideButton = event.target.closest('[data-guide]');
   if (guideButton) return openDetail(guideButton.dataset.guide);
