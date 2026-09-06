@@ -21,6 +21,11 @@ const authForm = document.querySelector('#authForm');
 const authError = document.querySelector('#authError');
 const nameField = document.querySelector('#nameField');
 const authName = document.querySelector('#authName');
+const profileButton = document.querySelector('#profileButton');
+const profileDropdown = document.querySelector('#profileDropdown');
+const profileInitial = document.querySelector('#profileInitial');
+const profileName = document.querySelector('#profileName');
+const profileEmail = document.querySelector('#profileEmail');
 let authMode = 'signin';
 let activeFilter = 'all';
 let showSavedOnly = false;
@@ -126,9 +131,18 @@ document.querySelector('#closeModal').addEventListener('click', () => modal.clas
 modal.addEventListener('click', (event) => { if (event.target === modal) modal.classList.add('hidden'); });
 
 function showApp() {
+  updateProfile();
   authScreen.classList.add('auth-hidden');
   appShell.classList.add('is-visible');
   window.setTimeout(() => { authScreen.hidden = true; initScrollReveals(); }, 450);
+}
+
+function updateProfile() {
+  const session = JSON.parse(localStorage.getItem('weekend-wander-session') || '{}');
+  const name = session.name || 'Wanderer';
+  profileName.textContent = name;
+  profileEmail.textContent = session.email || '';
+  profileInitial.textContent = name.charAt(0).toUpperCase();
 }
 
 function showAuth() {
@@ -171,9 +185,31 @@ authForm.addEventListener('submit', (event) => {
 
 document.querySelector('#signOut').addEventListener('click', () => {
   localStorage.removeItem('weekend-wander-session');
+  profileDropdown.hidden = true;
+  profileButton.setAttribute('aria-expanded', 'false');
   showAuth();
   authForm.reset();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+profileButton.addEventListener('click', (event) => {
+  event.stopPropagation();
+  const isOpen = profileDropdown.hidden;
+  profileDropdown.hidden = !isOpen;
+  profileButton.setAttribute('aria-expanded', String(isOpen));
+});
+
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('.profile-menu')) {
+    profileDropdown.hidden = true;
+    profileButton.setAttribute('aria-expanded', 'false');
+  }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  profileDropdown.hidden = true;
+  profileButton.setAttribute('aria-expanded', 'false');
 });
 
 if (localStorage.getItem('weekend-wander-session')) showApp();
