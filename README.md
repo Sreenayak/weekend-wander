@@ -38,6 +38,7 @@ No build step or package installation is required.
 - Frontend-only session persistence with sign-out using browser `localStorage`.
 - Authenticated profile avatar in the header with the user name, email, and red logout action.
 - Weekend Match planner that filters escapes by trip length and estimated spend.
+- Pocket Itinerary generator with day-by-day plans and clipboard copy from each destination guide.
 - Slide-up app entrance and staggered scroll-reveal animations for discovery content.
 - Reduced-motion support through `prefers-reduced-motion`.
 - Responsive layouts for desktop, tablet, and mobile widths.

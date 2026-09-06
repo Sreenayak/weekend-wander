@@ -31,6 +31,7 @@ let activeFilter = 'all';
 let showSavedOnly = false;
 let matchDuration = 'all';
 let matchBudget = 'all';
+let itineraryDestination = null;
 let saved = JSON.parse(localStorage.getItem('weekend-wander-saved') || '[]');
 
 function renderDestinations() {
@@ -111,6 +112,7 @@ function openDetail(id) {
   const saveButton = document.querySelector('#detailSave');
   saveButton.textContent = saved.includes(id) ? 'Remove from my plan' : 'Add to my plan';
   saveButton.dataset.saveDetail = id;
+  document.querySelector('#itineraryButton').dataset.itinerary = id;
   document.querySelector('#detailModal').classList.remove('hidden');
 }
 
@@ -135,6 +137,22 @@ document.querySelector('#savedNav').addEventListener('click', () => { searchInpu
 document.querySelector('#planButton').addEventListener('click', () => { renderPlan(); document.querySelector('#planModal').classList.remove('hidden'); });
 document.querySelector('#closePlan').addEventListener('click', () => document.querySelector('#planModal').classList.add('hidden'));
 document.querySelector('#closeDetail').addEventListener('click', () => document.querySelector('#detailModal').classList.add('hidden'));
+document.querySelector('#itineraryButton').addEventListener('click', (event) => {
+  const destination = destinations.find((item) => item.id === event.currentTarget.dataset.itinerary);
+  itineraryDestination = destination;
+  const dayTwo = destination.duration.startsWith('3') ? `<article class="itinerary-day"><span>02</span><div><b>Go a little further</b><p>Take the scenic route to ${destination.highlights[1].toLowerCase()}, then make time for a long lunch and an unhurried afternoon.</p></div></article>` : '';
+  document.querySelector('#itineraryTitle').textContent = `${destination.name}, your way`;
+  document.querySelector('#itineraryIntro').textContent = `A gentle ${destination.duration} rhythm, built around the good parts of ${destination.location}.`;
+  document.querySelector('#itineraryDays').innerHTML = `<article class="itinerary-day"><span>01</span><div><b>Arrive softly</b><p>Start with ${destination.highlights[0].toLowerCase()} and let the first evening stay wonderfully open.</p></div></article>${dayTwo}<article class="itinerary-day"><span>${destination.duration.startsWith('3') ? '03' : '02'}</span><div><b>Keep one thing for last</b><p>Make time for ${destination.highlights[2].toLowerCase()}, a slow meal, and one view you will remember on Monday.</p></div></article>`;
+  document.querySelector('#detailModal').classList.add('hidden');
+  document.querySelector('#itineraryModal').classList.remove('hidden');
+});
+document.querySelector('#closeItinerary').addEventListener('click', () => document.querySelector('#itineraryModal').classList.add('hidden'));
+document.querySelector('#copyItinerary').addEventListener('click', async () => {
+  if (!itineraryDestination) return;
+  const text = `My ${itineraryDestination.name} pocket itinerary\n01 Arrive softly: ${itineraryDestination.highlights[0]}\n${itineraryDestination.duration.startsWith('3') ? `02 Go a little further: ${itineraryDestination.highlights[1]}\n` : ''}${itineraryDestination.duration.startsWith('3') ? '03' : '02'} Keep one thing for last: ${itineraryDestination.highlights[2]}`;
+  try { await navigator.clipboard.writeText(text); showToast('Pocket itinerary copied.'); } catch { showToast('Your itinerary is ready to save.'); }
+});
 document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.addEventListener('click', (event) => { if (event.target === backdrop) backdrop.classList.add('hidden'); }));
 document.addEventListener('keydown', (event) => { if (event.key !== 'Escape') return; document.querySelectorAll('.modal-backdrop').forEach((modalElement) => modalElement.classList.add('hidden')); });
 function renderPlan() {
