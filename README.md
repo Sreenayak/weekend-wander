@@ -35,6 +35,7 @@ No build step or package installation is required.
 - Saved-only discovery mode from the header Saved control.
 - Realistic estimated prices per person for each destination, shown in cards, guides, and saved plans.
 - Animated sign-in and account creation gate before the travel experience.
+- Guest access lets reviewers reach the destination discovery experience without creating an account.
 - Frontend-only session persistence with sign-out using browser `localStorage`.
 - Authenticated profile avatar in the header with the user name, email, and red logout action.
 - Weekend Match planner that filters escapes by trip length and estimated spend.

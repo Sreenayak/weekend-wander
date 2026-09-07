@@ -42,6 +42,7 @@
         <label id="nameField" class="auth-field hidden"><span>Your name</span><input id="authName" type="text" placeholder="What should we call you?" autocomplete="name" /></label>
         <p id="authError" class="auth-error" role="alert"></p>
         <button id="authSubmit" class="primary-button auth-submit" type="submit">Continue to Weekend Wander <span>↗</span></button>
+        <button id="guestAccess" class="guest-button" type="button">Explore destinations as a guest <span>→</span></button>
       </form>
       <p class="auth-footnote">No credit card. No noise. Just better weekends.</p>
     </div>
@@ -80,11 +81,11 @@
 
     <section id="discover" class="discover-section mx-auto max-w-7xl px-5 py-16 lg:px-8">
       <div class="section-heading">
-        <div><p class="eyebrow">Curated for your kind of weekend</p><h2>Where will you wander?</h2></div>
+        <div><p class="eyebrow">Destination discovery</p><h2>Where will you wander?</h2></div>
         <button id="surpriseButton" class="text-button" type="button">Surprise me <span>✦</span></button>
       </div>
       <div class="filter-bar" role="search">
-        <label class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search a place or a feeling..." /></label>
+        <label class="search-field"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" aria-label="Search destinations" placeholder="Search destinations or a feeling..." /></label>
         <div class="filter-pills" aria-label="Filter destinations">
           <button class="filter-pill active" data-filter="all" type="button">All escapes</button>
           <button class="filter-pill" data-filter="coast" type="button">Coastal</button>
@@ -93,9 +94,8 @@
         </div>
         <label class="sort-field">Sort by <select id="sortSelect" aria-label="Sort destinations"><option value="featured">Featured</option><option value="budget">Lowest budget</option><option value="shortest">Shortest trip</option><option value="name">Name A-Z</option></select></label>
       </div>
-      <div class="plan-strip"><div><span class="plan-kicker">Your weekend shortlist</span><strong id="planSummary">Nothing saved yet</strong></div><button id="planButton" class="plan-button" type="button">Open my plan <span>→</span></button></div>
+      <div class="plan-strip"><div><span class="plan-kicker">Shortlist / selection</span><strong id="planSummary">Nothing saved yet</strong></div><button id="planButton" class="plan-button" type="button">Open my plan <span>→</span></button></div>
       <div id="matchPanel" class="match-panel"><div class="match-intro"><span class="match-spark">✦</span><div><p class="eyebrow">A faster way to choose</p><h3>Find my best match</h3><p>Tell us how much time and budget you have. We’ll narrow the weekend down.</p></div></div><div class="match-controls"><div><span class="match-label">I have</span><div class="match-options" role="group" aria-label="Trip length"><button class="match-option active" data-duration="all" type="button">Any length</button><button class="match-option" data-duration="2" type="button">2 days</button><button class="match-option" data-duration="3" type="button">3 days</button></div></div><div><span class="match-label">I want to spend</span><div class="match-options" role="group" aria-label="Trip budget"><button class="match-option active" data-budget="all" type="button">Any budget</button><button class="match-option" data-budget="low" type="button">Under $400</button><button class="match-option" data-budget="mid" type="button">$400–600</button><button class="match-option" data-budget="high" type="button">$600+</button></div></div></div><div class="match-footer"><strong id="matchResult">8 escapes to explore</strong><button id="resetMatch" class="match-reset" type="button">Reset match</button></div></div>
-      <section class="recommendation-panel" aria-labelledby="recommendationTitle"><div class="recommendation-heading"><div><p class="eyebrow">Picked around your signals</p><h3 id="recommendationTitle">Made for your weekend</h3></div><span class="recommendation-note">Updates as you browse</span></div><div id="recommendationGrid" class="recommendation-grid"></div></section>
       <div id="destinationGrid" class="destination-grid" aria-live="polite"></div>
       <p id="emptyState" class="empty-state hidden">No escapes found. Try a different mood or place.</p>
     </section>

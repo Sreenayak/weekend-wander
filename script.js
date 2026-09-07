@@ -15,7 +15,6 @@ const emptyState = document.querySelector('#emptyState');
 const savedCount = document.querySelector('#savedCount');
 const planSummary = document.querySelector('#planSummary');
 const sortSelect = document.querySelector('#sortSelect');
-const recommendationGrid = document.querySelector('#recommendationGrid');
 const authScreen = document.querySelector('#authScreen');
 const appShell = document.querySelector('#appShell');
 const authForm = document.querySelector('#authForm');
@@ -62,20 +61,6 @@ function renderDestinations() {
   savedCount.textContent = saved.length;
   planSummary.textContent = saved.length ? `${saved.length} place${saved.length === 1 ? '' : 's'} saved for later` : 'Nothing saved yet';
   document.querySelector('#matchResult').textContent = `${filtered.length} escape${filtered.length === 1 ? '' : 's'} to explore`;
-  renderRecommendations();
-}
-
-function renderRecommendations() {
-  const scored = destinations.map((destination) => {
-    let score = 0;
-    if (activeFilter !== 'all' && destination.type === activeFilter) score += 4;
-    if (matchDuration !== 'all' && destination.duration.startsWith(matchDuration)) score += 3;
-    if (matchBudget !== 'all' && ((matchBudget === 'low' && destination.price < 400) || (matchBudget === 'mid' && destination.price >= 400 && destination.price <= 600) || (matchBudget === 'high' && destination.price > 600))) score += 3;
-    if (saved.some((id) => destinations.find((item) => item.id === id)?.type === destination.type)) score += 2;
-    if (searchInput.value.trim() && `${destination.name} ${destination.location} ${destination.label}`.toLowerCase().includes(searchInput.value.trim().toLowerCase())) score += 5;
-    return { destination, score };
-  }).sort((first, second) => second.score - first.score || first.destination.name.localeCompare(second.destination.name)).slice(0, 3);
-  recommendationGrid.innerHTML = scored.map(({ destination }) => `<article class="recommendation-card"><img src="${destination.image}" alt="${destination.name}" loading="lazy" /><div class="recommendation-card-content"><span>${destination.label}</span><h4>${destination.name}</h4><p>${destination.description}</p><button class="recommendation-link" data-recommend="${destination.id}" type="button">Explore guide ↗</button></div></article>`).join('');
 }
 
 function showToast(message) {
@@ -114,10 +99,6 @@ grid.addEventListener('click', (event) => {
   saved = saved.includes(id) ? saved.filter((item) => item !== id) : [...saved, id];
   localStorage.setItem('weekend-wander-saved', JSON.stringify(saved)); renderDestinations();
   showToast(saved.includes(id) ? 'Saved to your weekend list.' : 'Removed from your saved list.');
-});
-recommendationGrid.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-recommend]');
-  if (button) openDetail(button.dataset.recommend);
 });
 
 function openDetail(id) {
@@ -249,6 +230,12 @@ document.querySelector('#signOut').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+document.querySelector('#guestAccess').addEventListener('click', () => {
+  localStorage.setItem('weekend-wander-session', JSON.stringify({ email: 'guest@weekendwander.local', name: 'Guest Wanderer', mode: 'guest' }));
+  showApp();
+  showToast('Welcome in. Explore freely, save anything you like.');
+});
+
 profileButton.addEventListener('click', (event) => {
   event.stopPropagation();
   const isOpen = profileDropdown.hidden;
@@ -269,6 +256,5 @@ document.addEventListener('keydown', (event) => {
   profileButton.setAttribute('aria-expanded', 'false');
 });
 
-// Let guests explore the destination experience before creating an account.
-showApp();
+if (localStorage.getItem('weekend-wander-session')) showApp();
 renderDestinations();
