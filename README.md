@@ -52,3 +52,15 @@ No build step or package installation is required.
 - The local `logo.svg` is used for the favicon, header, and footer brand identity.
 - Saved destination IDs are stored under `weekend-wander-saved` in `localStorage`.
 - Auth sessions are stored under `weekend-wander-session` in `localStorage`; this is a mock frontend flow and does not provide production security or a backend account system.
+
+## Evaluation coverage
+
+| Criterion | Implementation evidence |
+| --- | --- |
+| Problem understanding | Hero workflow moves a user from discover to compare to plan; Weekend Match turns limited time and budget into a destination shortlist. |
+| User experience | Guest access, clear navigation, search, mood filters, saved mode, mini guides, profile menu, and copy actions keep the path discoverable. |
+| Visual design | Editorial Fraunces/DM Sans pairing, local logo, destination imagery, peach/fern palette, responsive cards, modal surfaces, and purposeful motion. |
+| Functionality | Sign in/sign up mock flow, search, sort, filters, saved trips, match planner, mini guide, itinerary generator, clipboard actions, and logout. |
+| Responsiveness | CSS breakpoints cover desktop, tablet, and mobile layouts; modal content, planner controls, cards, and navigation adapt to narrow screens. |
+| Code quality | Semantic HTML, one destination data source, delegated card interactions, localStorage state, isolated rendering helpers, and no build dependency. |
+| Creativity and innovation | Mood-led discovery, Surprise me, Weekend Match, Pocket Itinerary, and the editorial postcard-style entry experience. |
