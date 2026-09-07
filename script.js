@@ -1,14 +1,9 @@
-const destinations = [
-  { id: 'amalfi', name: 'Amalfi Coast', location: 'Italy', type: 'coast', label: 'Sun-soaked', description: 'Lemon groves, sea swims, and long lunches.', duration: '3 days', budget: '$$$', price: 680, best: 'May–September', highlights: ['Ravello gardens', 'Sunset boat ride', 'Lemon granita'], image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=82' },
-  { id: 'copenhagen', name: 'Copenhagen', location: 'Denmark', type: 'city', label: 'Design-forward', description: 'Bikes, bakeries, and very good people watching.', duration: '2 days', budget: '$$', price: 420, best: 'April–October', highlights: ['Canal-side cycling', 'Nørrebro bakeries', 'Louisiana Museum'], image: 'https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&w=800&q=82' },
-  { id: 'azores', name: 'São Miguel', location: 'Azores', type: 'nature', label: 'Wild & green', description: 'Volcanic lakes and hot springs under open skies.', duration: '3 days', budget: '$$', price: 510, best: 'June–October', highlights: ['Sete Cidades lake', 'Furnas hot springs', 'Ponta Delgada'], image: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=82' },
-  { id: 'kyoto', name: 'Kyoto', location: 'Japan', type: 'city', label: 'Quietly magical', description: 'Temple walks, tiny bars, and gardens in bloom.', duration: '3 days', budget: '$$$', price: 790, best: 'March–May', highlights: ['Fushimi Inari dawn', 'Gion backstreets', 'Tea house afternoon'], image: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=82' },
-  { id: 'mallorca', name: 'Mallorca', location: 'Spain', type: 'coast', label: 'Blue hour', description: 'Mountain roads that end at a perfect cove.', duration: '3 days', budget: '$$', price: 460, best: 'May–October', highlights: ['Deià swim', 'Tramuntana drive', 'Palma old town'], image: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=800&q=82' },
-  { id: 'lake-bled', name: 'Lake Bled', location: 'Slovenia', type: 'nature', label: 'Storybook', description: 'Alpine air, still water, and a tiny island.', duration: '2 days', budget: '$', price: 295, best: 'May–October', highlights: ['Lake loop walk', 'Island boat ride', 'Vintgar Gorge'], image: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?auto=format&fit=crop&w=800&q=82' },
-  { id: 'lisbon', name: 'Lisbon', location: 'Portugal', type: 'city', label: 'Golden & easy', description: 'Tile-lined streets, custard tarts, late sunsets.', duration: '2 days', budget: '$$', price: 360, best: 'All year', highlights: ['Tram 28 ride', 'Alfama sunset', 'Pastéis de nata'], image: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=82' },
-  { id: 'scotland', name: 'The Highlands', location: 'Scotland', type: 'nature', label: 'Big skies', description: 'Misty lochs and a cabin with no notifications.', duration: '3 days', budget: '$$', price: 540, best: 'April–September', highlights: ['Loch Ness drive', 'Glen Coe hike', 'Cabin fire'], image: 'https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=800&q=82' }
-];
+import { destinations as catalog } from './data/destinations.js';
+import { destinationCard, matchesDestination, sortDestinations } from './components/discovery.js';
+import { clearSession, profileFromSession, readSession, writeSession } from './components/auth.js';
+import { buildItinerary, itineraryText } from './components/planner.js';
 
+const destinations = catalog;
 const grid = document.querySelector('#destinationGrid');
 const searchInput = document.querySelector('#searchInput');
 const emptyState = document.querySelector('#emptyState');
@@ -35,28 +30,8 @@ let itineraryDestination = null;
 let saved = JSON.parse(localStorage.getItem('weekend-wander-saved') || '[]');
 
 function renderDestinations() {
-  const query = searchInput.value.trim().toLowerCase();
-  const filtered = destinations.filter((destination) => {
-    const matchesFilter = activeFilter === 'all' || destination.type === activeFilter;
-    const matchesQuery = !query || `${destination.name} ${destination.location} ${destination.label} ${destination.description}`.toLowerCase().includes(query);
-    const matchesDuration = matchDuration === 'all' || destination.duration.startsWith(matchDuration);
-    const matchesBudget = matchBudget === 'all' || (matchBudget === 'low' && destination.price < 400) || (matchBudget === 'mid' && destination.price >= 400 && destination.price <= 600) || (matchBudget === 'high' && destination.price > 600);
-    return matchesFilter && matchesQuery && matchesDuration && matchesBudget && (!showSavedOnly || saved.includes(destination.id));
-  }).sort((first, second) => {
-    if (sortSelect.value === 'name') return first.name.localeCompare(second.name);
-    if (sortSelect.value === 'shortest') return Number(first.duration[0]) - Number(second.duration[0]);
-    if (sortSelect.value === 'budget') return first.budget.length - second.budget.length;
-    return 0;
-  });
-  grid.innerHTML = filtered.map((destination) => `
-    <article class="destination-card">
-      <div class="destination-image">
-        <img src="${destination.image}" alt="A view of ${destination.name}" loading="lazy" />
-        <button class="save-card ${saved.includes(destination.id) ? 'saved' : ''}" data-save="${destination.id}" type="button" aria-label="${saved.includes(destination.id) ? 'Remove' : 'Save'} ${destination.name}">${saved.includes(destination.id) ? '♥' : '♡'}</button>
-      </div>
-      <div class="card-meta"><span>${destination.label}</span><span>${destination.type}</span></div>
-      <h3>${destination.name}</h3><p>${destination.description}</p><div class="card-price"><span>from</span><strong>$${destination.price}</strong><small>per person</small></div><button class="guide-link" data-guide="${destination.id}" type="button">View mini guide <span>↗</span></button>
-    </article>`).join('');
+  const filtered = sortDestinations(destinations.filter((destination) => matchesDestination(destination, { query: searchInput.value, filter: activeFilter, duration: matchDuration, budget: matchBudget, savedOnly: showSavedOnly, saved })), sortSelect.value);
+  grid.innerHTML = filtered.map((destination) => destinationCard(destination, saved)).join('');
   emptyState.classList.toggle('hidden', filtered.length > 0);
   savedCount.textContent = saved.length;
   planSummary.textContent = saved.length ? `${saved.length} place${saved.length === 1 ? '' : 's'} saved for later` : 'Nothing saved yet';
@@ -140,17 +115,16 @@ document.querySelector('#closeDetail').addEventListener('click', () => document.
 document.querySelector('#itineraryButton').addEventListener('click', (event) => {
   const destination = destinations.find((item) => item.id === event.currentTarget.dataset.itinerary);
   itineraryDestination = destination;
-  const dayTwo = destination.duration.startsWith('3') ? `<article class="itinerary-day"><span>02</span><div><b>Go a little further</b><p>Take the scenic route to ${destination.highlights[1].toLowerCase()}, then make time for a long lunch and an unhurried afternoon.</p></div></article>` : '';
   document.querySelector('#itineraryTitle').textContent = `${destination.name}, your way`;
   document.querySelector('#itineraryIntro').textContent = `A gentle ${destination.duration} rhythm, built around the good parts of ${destination.location}.`;
-  document.querySelector('#itineraryDays').innerHTML = `<article class="itinerary-day"><span>01</span><div><b>Arrive softly</b><p>Start with ${destination.highlights[0].toLowerCase()} and let the first evening stay wonderfully open.</p></div></article>${dayTwo}<article class="itinerary-day"><span>${destination.duration.startsWith('3') ? '03' : '02'}</span><div><b>Keep one thing for last</b><p>Make time for ${destination.highlights[2].toLowerCase()}, a slow meal, and one view you will remember on Monday.</p></div></article>`;
+  document.querySelector('#itineraryDays').innerHTML = buildItinerary(destination).map((day) => `<article class="itinerary-day"><span>${day.number}</span><div><b>${day.title}</b><p>${day.text}</p></div></article>`).join('');
   document.querySelector('#detailModal').classList.add('hidden');
   document.querySelector('#itineraryModal').classList.remove('hidden');
 });
 document.querySelector('#closeItinerary').addEventListener('click', () => document.querySelector('#itineraryModal').classList.add('hidden'));
 document.querySelector('#copyItinerary').addEventListener('click', async () => {
   if (!itineraryDestination) return;
-  const text = `My ${itineraryDestination.name} pocket itinerary\n01 Arrive softly: ${itineraryDestination.highlights[0]}\n${itineraryDestination.duration.startsWith('3') ? `02 Go a little further: ${itineraryDestination.highlights[1]}\n` : ''}${itineraryDestination.duration.startsWith('3') ? '03' : '02'} Keep one thing for last: ${itineraryDestination.highlights[2]}`;
+  const text = itineraryText(itineraryDestination);
   try { await navigator.clipboard.writeText(text); showToast('Pocket itinerary copied.'); } catch { showToast('Your itinerary is ready to save.'); }
 });
 document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.addEventListener('click', (event) => { if (event.target === backdrop) backdrop.classList.add('hidden'); }));
@@ -176,11 +150,10 @@ function showApp() {
 }
 
 function updateProfile() {
-  const session = JSON.parse(localStorage.getItem('weekend-wander-session') || '{}');
-  const name = session.name || 'Wanderer';
-  profileName.textContent = name;
-  profileEmail.textContent = session.email || '';
-  profileInitial.textContent = name.charAt(0).toUpperCase();
+  const profile = profileFromSession(readSession());
+  profileName.textContent = profile.name;
+  profileEmail.textContent = profile.email;
+  profileInitial.textContent = profile.initial;
 }
 
 function showAuth() {
@@ -216,13 +189,13 @@ authForm.addEventListener('submit', (event) => {
   if (!email || !email.includes('@')) return void (authError.textContent = 'Please enter a valid email address.');
   if (password.length < 6) return void (authError.textContent = 'Your password needs at least 6 characters.');
   if (authMode === 'signup' && name.length < 2) return void (authError.textContent = 'Tell us your name so we know what to call you.');
-  localStorage.setItem('weekend-wander-session', JSON.stringify({ email, name, mode: authMode }));
+  writeSession({ email, name, mode: authMode });
   showToast(`Welcome${name ? `, ${name}` : ''}. Your next escape is ready.`);
   showApp();
 });
 
 document.querySelector('#signOut').addEventListener('click', () => {
-  localStorage.removeItem('weekend-wander-session');
+  clearSession();
   profileDropdown.hidden = true;
   profileButton.setAttribute('aria-expanded', 'false');
   showAuth();
@@ -231,7 +204,7 @@ document.querySelector('#signOut').addEventListener('click', () => {
 });
 
 document.querySelector('#guestAccess').addEventListener('click', () => {
-  localStorage.setItem('weekend-wander-session', JSON.stringify({ email: 'guest@weekendwander.local', name: 'Guest Wanderer', mode: 'guest' }));
+  writeSession({ email: 'guest@weekendwander.local', name: 'Guest Wanderer', mode: 'guest' });
   showApp();
   showToast('Welcome in. Explore freely, save anything you like.');
 });
@@ -256,5 +229,5 @@ document.addEventListener('keydown', (event) => {
   profileButton.setAttribute('aria-expanded', 'false');
 });
 
-if (localStorage.getItem('weekend-wander-session')) showApp();
+if (readSession()) showApp();
 renderDestinations();
